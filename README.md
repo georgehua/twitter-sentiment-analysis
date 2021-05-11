@@ -4,12 +4,32 @@
 
 
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [1. Executive Summary](#1-executive-summary)
+- [2. Dataset](#2-dataset)
+- [3. Project Setup](#3-project-setup)
+  - [3.1. Download Dataset](#31-download-dataset)
+  - [3.2. Exploratory Data Analysis](#32-exploratory-data-analysis)
+  - [3.3. Data Preprocessing](#33-data-preprocessing)
+- [4.  Modeling](#4--modeling)
+  - [4.1. Naïve Bayesian Model](#41-na%C3%AFve-bayesian-model)
+  - [4.2. RNN-LSTM](#42-rnn-lstm)
+    - [4.2.a Word Embeddings](#42a-word-embeddings)
+    - [4.2.b Data Padding](#42b-data-padding)
+    - [4.2.c Building Model with Keras](#42c-building-model-with-keras)
+    - [4.2.d. Adding Dropout layers (Regularization)](#42d-adding-dropout-layers-regularization)
+    - [4.2.e Further Findings and Discussion](#42e-further-findings-and-discussion)
+- [5. Further Work](#5-further-work)
+- [6. Project Structure](#6-project-structure)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
-## Executive Summary
+## 1. Executive Summary
 
 **Goal:**
 
@@ -17,7 +37,7 @@ In this project I want to compare two models **Naïve Bayes** and **RNN-LSTM** t
 
 
 
-**Final Results:**
+**Final Results:** (Modeling Notebook: https://georgehua.github.io/twitter-sentiment-analysis/Modeling.html)
 
 **Naïve Bayes:** (clearly overfitting, bad performance)
 
@@ -38,22 +58,20 @@ All	        283182	36818	320000
 
 **RNN-LSTM** (more consistent results than Naïve Bayes)
 
-
-
-No regularization (dropout): model overfits, validation accuracy around 75%
+**No regularization** (dropout): model **overfits**, validation accuracy around 75%
 
 <img src="figures/lstm-no-dropout.png">
 
-With regularization (dropout layers): improved slightly, 78% accuracy
+**With regularization** (dropout layers): improved slightly, 78% accuracy
 
 <img src="figures/lstm-w-dropout.png">
 
-Furthering cleaning noisy words: best model, 78.5% at 4th epoch
+**Furthering cleaning** noisy words: best model, **78.5% at 4th epoch**
 
 <img src="figures/lstm-clean-text.png">
 
 
-## Dataset
+## 2. Dataset
 
 The dataset is named sentiment140, created by researcher from Sandford University. The link for their dataset: http://help.sentiment140.com/home
 
@@ -65,11 +83,11 @@ This means we have a balanced dataset with 800k positive tweets, and 800k negati
 
 
 
-## Walk Through the Project
+## 3. Project Setup
 
 
 
-### Download Dataset
+### 3.1. Download Dataset
 
 You can use Kaggle CLI tool to download the dataset and save in the project data/ folder
 
@@ -83,7 +101,7 @@ Or, manually download data from: https://www.kaggle.com/kazanova/sentiment140
 
 
 
-### Exploratory Data Analysis
+### 3.2. Exploratory Data Analysis
 
 Notebook Link: https://georgehua.github.io/twitter-sentiment-analysis/EDA.html
 
@@ -117,7 +135,7 @@ Number of tweets by each weekday (0 -> negative, 4 -> positive, time zone not cl
 
 
 
-### Data Preprocessing
+### 3.3. Data Preprocessing
 
 - Drop unnecessary columns, and only keep label and text
 - Tokenize the text input with TweetTokenizer (from nltk package, specialized for tweets, such as preserving hashtags)
@@ -128,7 +146,7 @@ Number of tweets by each weekday (0 -> negative, 4 -> positive, time zone not cl
 
 
 
-## Modeling
+## 4.  Modeling
 
 Notebook Link: https://georgehua.github.io/twitter-sentiment-analysis/Modeling.html
 
@@ -138,7 +156,7 @@ Before running the two models, I train-test split the dataset by 80%, 20%.
 
 
 
-### Naïve Bayesian Model
+### 4.1. Naïve Bayesian Model
 
 One of the most commonly used classification models in Natural Language Processing (NLP) is the Naïve Bayesian.
 **Naïve Bayesian** classifiers are a collection of classification algorithms based on Bayes’ Theorem. It is not a single algorithm but rather a family of algorithms where all of them make the following *naïve* assumptions:
@@ -197,7 +215,7 @@ Return: 1 (correct)
 
 
 
-### RNN-LSTM
+### 4.2. RNN-LSTM
 
 A **L**ong **S**hort-**T**erm **M**emory, or **LSTM**, is a type of machine learning neural networks. More specifically, it belongs to the family of **R**ecurrent **N**eural **N**etworks (**RNN**) in Deep Learning, which are specifically conceived in order to process *temporal data*.
 
@@ -207,7 +225,7 @@ In this section, I implemented the following process to build a LSTM model, deta
 
 
 
-**Word Embeddings**
+#### 4.2.a Word Embeddings
 
 Word embeddings are a way for us to convert words to *representational vectors*, which created a meaning representation of words and feed into the RNN model.
 
@@ -219,13 +237,13 @@ For building a word embedding we can use the library GloVe, it's robust and accu
 
 
 
-**Data Padding**
+#### 4.2.b Data Padding
 
 Further in our training we would like to speed the process up by splitting data into *mini-batches*. However, and in order to be able to utilize batch learning, keras (and similarly to most machine learning frameworks) requires all data within the same batch to have the same length or *dimension*. 
 
 
 
-**Building Model with Keras**
+#### 4.2.c Building Model with Keras
 
 ```
 model = Sequential()
@@ -238,7 +256,7 @@ model.add(Dense(units=1, activation='sigmoid'))
 
 
 
-**Adding Dropout layers (Regularization)**
+#### 4.2.d. Adding Dropout layers (Regularization)
 
 **Regularization** is the process of preventing a model from over-fitting the training data. **Dropout** is one of the many regularization techniques, and also one of the simplest to implement and most commonly used. 
 
@@ -262,7 +280,7 @@ with tf.device('/device:GPU:0'):
     model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs = 20, batch_size = 128, shuffle=True)
 ```
 
-
+#### 4.2.e Further Findings and Discussion
 
 What's worth mentioning is, after I trained the initial LSTM model, I found there're a lot of unknown words that are not recognizable to GloVe representation. So I checked those words and see how they look like:
 
@@ -311,7 +329,7 @@ So all in all, I would say that our current model is relatively robust in classi
 
 
 
-## Further Work
+## 5. Further Work
 
 - Further data cleaning and re-labelling. As the data origin is from twitter, it is expected to contain a wide range of not "official" English words, so data cleaning is crucial in such a scenario. Furthermore, as the data labelling has been done automatically based on the reactions of the tweet, this labelling is by no means perfect and a human re-labelling of the whole data would certainly be beneficial.
 - Introduce a neutral class, transforming the problem to a multi-class classification problem.
@@ -320,7 +338,7 @@ So all in all, I would say that our current model is relatively robust in classi
 
 
 
-## Project Structure
+## 6. Project Structure
 
 
 
@@ -339,7 +357,6 @@ So all in all, I would say that our current model is relatively robust in classi
     │                            generated with `pip freeze > requirements.txt`
 
 
-------------
 
 
 
