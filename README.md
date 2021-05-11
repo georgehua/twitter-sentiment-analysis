@@ -3,21 +3,21 @@
 
 
 
-In this project I want to compare two models **Naïve Bayes** and **RNN-LSTM** to conduct Sentiment Analysis . Sentiment analysis is a branch of Natural Language Process that analyses a given piece of text and predicts whether this piece of text expresses positive or negative sentiment.
 
-The dataset is named sentiment140, created by researcher from Sandford University. The link for their dataset: http://help.sentiment140.com/home
-
-The way they collected tweets is described in this paper: https://cs.stanford.edu/people/alecmgo/papers/TwitterDistantSupervision09.pdf, basically what they did, quoting their own words is:
-
-> *Our approach was unique because our training data was automatically created, as opposed to having humans manual annotate tweets. In our approach, we assume that any tweet with positive emoticons, like :), were positive, and tweets with negative emoticons, like :(, were negative. We used the Twitter Search API to collect these tweets by using keyword search*
-
-This means we have a balanced dataset with 800k positive tweets, and 800k negative tweets, combining as a 1.6 millions dataset.
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 
 
-### Final Results:
+## Executive Summary
 
-0 -> negative; 1 -> positive
+**Goal:**
+
+In this project I want to compare two models **Naïve Bayes** and **RNN-LSTM** to conduct Sentiment Analysis . Sentiment analysis is a branch of Natural Language Process that analyses a given piece of text and predicts whether this piece of text expresses positive or negative sentiment (0 = negative; 1 = positive).
+
+
+
+**Final Results:**
 
 **Naïve Bayes:** (clearly overfitting, bad performance)
 
@@ -53,8 +53,15 @@ Furthering cleaning noisy words: best model, 78.5% at 4th epoch
 <img src="figures/lstm-clean-text.png">
 
 
+## Dataset
 
+The dataset is named sentiment140, created by researcher from Sandford University. The link for their dataset: http://help.sentiment140.com/home
 
+The way they collected tweets is described in this paper: https://cs.stanford.edu/people/alecmgo/papers/TwitterDistantSupervision09.pdf, basically what they did, quoting their own words is:
+
+> *Our approach was unique because our training data was automatically created, as opposed to having humans manual annotate tweets. In our approach, we assume that any tweet with positive emoticons, like :), were positive, and tweets with negative emoticons, like :(, were negative. We used the Twitter Search API to collect these tweets by using keyword search*
+
+This means we have a balanced dataset with 800k positive tweets, and 800k negative tweets, combining as a 1.6 millions dataset.
 
 
 
